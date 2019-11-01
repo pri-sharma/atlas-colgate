@@ -29,6 +29,7 @@ export const apiCall = (obj) => {
 export var gridOptionsProp = () => {
   return gridOptionsProp = {
     sideBar: true,
+    pivotMode: true,
     suppressContextMenu: true,
     enableBrowserTooltips: false,
     groupIncludeTotalFooter: true,
@@ -52,7 +53,11 @@ export var gridOptionsProp = () => {
     rowDeselection: true,
     quickFilterText: null,
     groupSelectsChildren: false,
-    pagination: true
+    pagination: true,
+    suppressRowClickSelection: true,
+    groupMultiAutoColumn: true,
+    groupHideOpenParents: false,
+    suppressMakeColumnVisibleAfterUnGroup: true
   }
 }
 export var generateDefColumns = (objData) => {
@@ -360,83 +365,4 @@ export var generateDefColumns = (objData) => {
   }
   return coldef;
 }
-// render() {
-//   return React.createElement("div", null, React.createElement("div", {
-//     id: "updateProgress",
-//     style:{ display: 'none'},
-//     role: "status",
-//     "aria-hidden": "true"
-//   }, React.createElement("div", {
-//     className: "updateProgress"
-//   }, React.createElement("img", {
-//     id: "imgUpdateProgress",
-//     title: "Loading ...",
-//     src: appurl + "loader.gif",
-//     alt: "Loading ...",
-//     className: "imgUpdateProgress"
-//   }))),
-//    React.createElement("div", {
-//     className: "box ag-theme-balham",
-//   },
-//   React.createElement("div", {
-//     className: "gridcontainer row header",
-//     "layout-xs": "column",
-//     layout: "row",
-//     style: {height:'auto'}
-//   }, React.createElement("div", {
-//     id: "headercontainer",
-//     className: "headercontainer"
-//   }, React.createElement("div", {
-//     className: "logo"
-//   }, React.createElement("img", {
-//     style: {height: '48px'},
-//     //src: "{{siteurl}}assets/medialogo.jpg"
-//   }), "  ")),
-//   React.createElement("div", {
-//     id: "filtercontainer",
-//     className: "filtercontainer  ui-inputtext"
-//   }, React.createElement("div", {
-//     className: "card"
-//   }, React.createElement("div", {
-//     className: "card-header",
-//     id: "headingOne"
-//   }, React.createElement("div", {
-//     className: "grid-filter"
-//   }, React.createElement("ul", {
-//     id: "ember264",
-//     className: "list-inline remove-style applied-filters ember-view",
-//     style: {marginbottom: '0px !important'}
-//   }, React.createElement("div", null, React.createElement("li", {
-//     className: "payment-date"
-//   }, React.createElement("div", {
-//     style: {display: 'flex'}
-//   }, React.createElement("span", {
-//     style: {display: 'flex',margintop: '7px'}
-//   }, "Records #:"), React.createElement("div", {
-//     id: "reportrange"
-//   }, React.createElement("select", {
-//     id: "drillDown",
-//     // ngModel: "selectedRecords",
-//     style: {width: '88px',height: '30px'}
-//   }, React.createElement("option", {
-//     value: "0"
-//   }, "18k"), React.createElement("option", {
-//     value: "1"
-//   }, "200k"))), React.createElement("div", {
-//     style: {marginleft:'10px'}
-//   }, React.createElement("button", {
-//     tooltip: "Click apply to update the available data.",
-//     options: "toptooltipOptions",
-//     id: "btnapply",
-//     type: "button",
-//     className: "btn btn-primary px-4 button-round-corners button-width",
-//     click: "loaderWarning(0)"
-//   }, "Apply"))))))))))),
-//   React.createElement(AgGridReact, {
-//     className: "row content myGrid ag-theme-balham showLoader",
-//     gridOptions: this.state.gridOptions,
-//     columnDefs: this.state.columnDefs,
-//     rowData: this.state.rowData
-//   }))
-//   )
-// }
+
