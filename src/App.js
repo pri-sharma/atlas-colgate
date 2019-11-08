@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 // import { apiUrl } from './ApiUrl'
 import logo from './logo.svg';
 import './App.css';
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import url from './assets/ApiUrl';
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 const apiurl = url.apiurl;
 class App extends Component {
@@ -18,16 +18,51 @@ class App extends Component {
   }
   componentDidMount() {
   }
+
 }
 
 export default App;
+
 export const apiCall = (obj) => {
-  return fetch(apiurl+obj)
+  return fetch(apiurl + obj)
     .then(result => result.json())
 }
 
 export var gridOptionsProp = () => {
   return gridOptionsProp = {
+    defaultColDef: {
+      sortable: true,
+      resizable: true,
+      enableValue: true,
+      //autoHeight: true,
+      // lockPinned: true,
+       hide: true,
+       floatCell: true, 
+       editable: false, 
+       enablePivot: true,
+       //enableRowGroup: true
+    },
+    autoGroupColumnDef: {
+      enableValue: false,
+      headerCheckboxSelection: true,
+      headerCheckboxSelectionFilteredOnly: true,
+      cellRenderer: 'agGroupCellRenderer',
+      cellClass: 'grouprow',
+      cellStyle: { color: "#3c8dbc" },
+      rowStyle: { color: "#3c8dbc" },
+      cellRendererParams: {
+        suppressCount: true,
+        checkbox: false,
+        footerValueGetter: '"Total"',
+        // innerRenderer:this.customCellRendererFunc
+  
+      },
+      filterValueGetter: function (params) {
+        var colGettingGrouped = params.colDef.showRowGroup;
+        var valueForOtherCol = params.api.getValue(colGettingGrouped.toString(), params.node);
+        return valueForOtherCol;
+      },
+    },
     sideBar: true,
     pivotMode: true,
     suppressContextMenu: true,
@@ -60,6 +95,7 @@ export var gridOptionsProp = () => {
     suppressMakeColumnVisibleAfterUnGroup: true
   }
 }
+
 export var generateDefColumns = (objData) => {
   const colData = objData;//await apiCall('gridViewStructure').then(res => { return res });// Get Column Structure data from API
   const uniqueAttCat = [];// Unique Attribute Category
@@ -105,15 +141,11 @@ export var generateDefColumns = (objData) => {
 
         attributeCategory.push({
           headerDataType: headerDataType,
-          headerName: headername, 
-          field: lowercaseFieldName, 
+          headerName: headername,
+          field: lowercaseFieldName,
           suppressFilter: Isfilter,
-          hide: true,
-          floatCell: true, 
-          editable: false, 
-          enablePivot: true, 
           enableRowGroup: true,
-          cellClass: 'ag-grid-cellClass',
+          //cellClass: 'ag-grid-cellClass',
           cellStyle: function (params) {
             if (params.column.aggFunc == 'Count' && typeof params.value == 'object') {
               return { textAlign: "right" };
@@ -121,7 +153,7 @@ export var generateDefColumns = (objData) => {
               return { textAlign: "center" };
             }
           },
-         allowedAggFuncs: ['Min', 'Max', 'Count'],
+          allowedAggFuncs: ['min', 'max', 'count'],
           //, comparator: this.dateComparator
           filter: agfilter,
           filterParams: {
@@ -172,18 +204,14 @@ export var generateDefColumns = (objData) => {
 
         attributeCategory.push({
           headerDataType: headerDataType,
-          headerName: headername, 
-          field: lowercaseFieldName, 
-          suppressFilter: Isfilter, 
+          headerName: headername,
+          field: lowercaseFieldName,
+          suppressFilter: Isfilter,
           filter: agfilter,
-          hide: true, 
-          floatCell: true, 
-          editable: false, 
-          enablePivot: false, 
           enableRowGroup: false,
-          cellClass: 'ag-grid-cellNumber', 
+         // cellClass: 'ag-grid-cellNumber',
           cellStyle: { textAlign: "right" },
-          allowedAggFuncs: ['Sum', 'Min', 'Max', 'Count', 'Avg'],
+          allowedAggFuncs: ['sum', 'min', 'max', 'count', 'avg'],
           //, valueFormatter: this.amountValueFormatter
           comparator: function (number1, number2) {
             if (number1 != null) {
@@ -236,25 +264,21 @@ export var generateDefColumns = (objData) => {
       else if (headerDataType == "decimal") {
 
         attributeCategory.push({
-           headerDataType: headerDataType,
-           headerName: headername, 
-           field: lowercaseFieldName, 
-           suppressFilter: Isfilter, 
-           filter: agfilter,
-           hide: true, 
-           floatCell: true, 
-           editable: false, 
-           enablePivot: false, 
-           enableRowGroup: false,
-           cellClass: 'ag-grid-cellNumber', 
-           cellStyle: { textAlign: "right" },
-           allowedAggFuncs: ['Sum', 'Min', 'Max', 'Count', 'Avg']
+          headerDataType: headerDataType,
+          headerName: headername,
+          field: lowercaseFieldName,
+          suppressFilter: Isfilter,
+          filter: agfilter,
+          enableRowGroup: false,
+          cellClass: 'ag-grid-cellNumber',
+          cellStyle: { textAlign: "right" },
+          allowedAggFuncs: ['sum', 'min', 'max', 'count', 'avg']
           //, valueFormatter: this.percentValueFormatter
           , comparator: function (number1, number2) {
             if (number1 != null) {
               if (typeof number1 == "object") {
                 number1 = number1.val;
-              } 
+              }
             }
             if (number2 != null) {
               if (typeof number2 == "object") {
@@ -296,23 +320,19 @@ export var generateDefColumns = (objData) => {
         })
 
       }
-      else if (headerDataType == "Id" || headerDataType == "Key") {
+      else if (headerDataType == "Id" || headerDataType == "Key" || headerDataType == "int" ) {
 
         attributeCategory.push({
           headerDataType: headerDataType,
           headerName: headername,
           field: lowercaseFieldName,
-          suppressFilter: Isfilter, 
+          suppressFilter: Isfilter,
           filter: agfilter,
-          hide: true,
-          floatCell: true, 
-          editable: false, 
-          enablePivot: true, 
           enableRowGroup: true,
-          cellClass: 'ag-grid-cellClass',
-          allowedAggFuncs: ['Count'],
-          cellStyle: { textAlign: "right" },
-         // , valueFormatter: this.valueFormatter
+         // cellClass: 'ag-grid-cellClass',
+          allowedAggFuncs: ['count'],
+          //cellStyle: { textAlign: "right" },
+          // , valueFormatter: this.valueFormatter
           comparator: function (number1, number2) {
             if (number1 != null) {
               if (typeof number1 == "object") {
@@ -324,7 +344,6 @@ export var generateDefColumns = (objData) => {
                 number2 = number2.val;
               }
             }
-
             if (number1 === null && number2 === null) {
               return 0;
             }
@@ -344,25 +363,22 @@ export var generateDefColumns = (objData) => {
           field: lowercaseFieldName,
           suppressFilter: Isfilter,
           filter: agfilter,
-          hide: true,
-          floatCell: true,
-          editable: false,
-          enablePivot: true,
           enableRowGroup: true,
-          cellClass: 'ag-grid-cellClass',
-          allowedAggFuncs: ['Count'],
-          cellStyle: function (params) {
-            if (params.column.aggFunc == 'Count' && typeof params.value == 'object') {
-              return { textAlign: "right" };
-            } else {
-              return { textAlign: "left" };
-            }
-          }
-
+          //cellClass: 'ag-grid-cellClass',
+          allowedAggFuncs: ['count'],
+          // cellStyle: function (params) {
+          //   if (params.column.aggFunc == 'Count' && typeof params.value == 'object') {
+          //     return { textAlign: "right" };
+          //   } else {
+          //     return { textAlign: "left" };
+          //   }
+          // }
         })
     }
     coldef.push({ headerName: attributeCategoryName, id: attributeCategoryId, children: attributeCategory })
   }
   return coldef;
 }
+
+
 
